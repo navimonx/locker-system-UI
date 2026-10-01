@@ -7,6 +7,12 @@ $studentId= $_SESSION['studentId'] ?? null;
 $userRole = $_SESSION['role']      ?? null;
 $loggedIn = isset($_SESSION['user_id']) || isset($_SESSION['studentId']);
 
+$roleNorm = strtolower(trim((string) ($userRole ?? '')));
+if ($roleNorm === 'registrar') {
+    header("Location: registrarpage.php");
+    exit();
+}
+
 // Build display name: prefer $name, fall back to studentId
 $displayName = $name ?: $studentId;
 ?>
@@ -663,7 +669,7 @@ $displayName = $name ?: $studentId;
     <?php endif; ?>
   </div>
 
-  <!-- ── Footer ────────────────────────────────────────────────── -->
+  <!-- ── Footer ──────────────────────────────────────────────── -->
   <footer>
     <div class="foot-brand">🔒 SecureLocker Inc.</div>
     <p>&copy; 2026 SecureLocker Inc. &mdash; Pamantasan ng Lungsod ng Valenzuela</p>
