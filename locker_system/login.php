@@ -27,8 +27,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['role']      = $row['role'];
 
         $role = strtolower(trim((string) ($row['role'] ?? 'student')));
-        if (in_array($role, ['admin', 'superadmin', 'registrar'], true)) {
+        if ($role === 'admin' || $role === 'superadmin') {
             header("Location: adminpage.php");
+        } elseif ($role === 'registrar') {
+            header("Location: registrarpage.php");
         } else {
             header("Location: index.php");
         }
