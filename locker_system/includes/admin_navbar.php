@@ -1,28 +1,90 @@
 <?php
-/** @var string $adminActive home|rentals|records|register */
-$adminActive = $adminActive ?? '';
+include(__DIR__ . "/db.php");
+require_once __DIR__ . '/includes/session.php';
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $studentId = $_POST['studentId'] ?? '';
+    $password  = $_POST['password'] ?? '';
+
+    $sql = "SELECT id, studentId, role, password FROM Users WHERE studentId = ? LIMIT 1";
+    $stmt = db_query($conn, $sql, [trim($studentId)]);
+
+    if ($stmt === false) {
+        die('Login query failed: ' . htmlspecialchars(db_last_error_message()));
+    }
+
+    $row = db_fetch($stmt);
+    if ($row && app_password_matches($password, $row['password'] ?? '')) {
+        if (!app_password_is_hashed($row['password'])) {
+            db_query($conn, "UPDATE Users SET password = ? WHERE id = ?",
+                [app_hash_password($password), (int) $row['id']]);
+        }
+
+        session_regenerate_id(true);
+        $_SESSION['user_id']   = $row['id'];
+        $_SESSION['studentId'] = $row['studentId'];
+        $_SESSION['role']      = $row['role'];
+
+        $role = strtolower(trim((string) ($row['role'] ?? 'student')));
+        if ($role === 'admin' || $role === 'superadmin') {
+            header("Location: adminpage.php");
+        } elseif ($role === 'registrar') {
+            header("Location: registrarpage.php");
+        } else {
+            header("Location: index.php");
+        }
+        exit();
+    } else {
+        $loginError = 'Invalid ID or password. Please try again.';
+    }
+}
+
+require_once __DIR__ . '/includes/popup_alerts.php';
+if (!empty($loginError)) {
+    popup_add('error', $loginError);
+}
+
+$pageTitle  = 'Login — SecureLocker Inc.';
+$activePage = 'login';
+include __DIR__ . '/includes/head.php';
+include __DIR__ . '/includes/navbar.php';
 ?>
-<header class="navbar">
-  <a href="adminpage.php" class="navbar-brand">
-    <div class="brand-icon">🛠️</div>
-    <span>SecureLocker Admin</span>
-  </a>
-  <nav>
-    <ul class="nav-links">
-      <li><a href="adminpage.php" class="<?= $adminActive === 'home' ? 'active' : '' ?>">Home</a></li>
-      <li><a href="adminrentals.php" class="<?= $adminActive === 'rentals' ? 'active' : '' ?>">Rentals</a></li>
-      <li><a href="admin_records.php" class="<?= $adminActive === 'records' ? 'active' : '' ?>">Records</a></li>
-      <li><a href="register.php" class="<?= $adminActive === 'register' ? 'active' : '' ?>">Create Admin</a></li>
-      <li><a href="profile.php" class="<?= $adminActive === 'settings' ? 'active' : '' ?>">Settings</a></li>
-      <?php if (!empty($displayName)): ?>
-        <li>
-          <span class="nav-badge">
-            <span class="dot"></span>
-            <?= htmlspecialchars($displayName) ?>
-          </span>
-        </li>
-      <?php endif; ?>
-      <li><a href="logout.php" class="btn-logout">Logout</a></li>
-    </ul>
-  </nav>
-</header>
+
+<main class="auth-layout auth-layout--centered">
+  <div class="auth-panel">
+    <div class="auth-card">
+      <h2>Welcome Back</h2>
+      <p class="subtitle">Sign in with your student ID and password to access your locker.</p>
+
+      <form method="POST" action="login.php">
+        <div class="form-group">
+          <label for="studentId">Student ID</label>
+          <input type="text" id="studentId" name="studentId" placeholder="e.g. 22-1234" required autofocus>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="password" name="password" required>
+            <button type="button" class="toggle-eye" onclick="toggleVis('password',this)">👁</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">Login</button>
+      </form>
+
+      <div class="divider">
+        Don't have an account? <a href="signup.php">Sign up</a>
+      </div>
+    </div>
+  </div>
+  <div class="auth-panel auth-panel--visual"></div>
+</main>
+
+<script>
+function toggleVis(id, btn) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+  btn.textContent = el.type === 'password' ? '👁' : '🙈';
+}
+</script>
+
+<?php include __DIR__ . '/includes/footer.php'; ?>
