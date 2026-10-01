@@ -1,0 +1,84 @@
+/* admin.css - Admin theme for Locker Management System */
+
+/* General body */
+body {
+  margin:0;
+  padding:0;
+  font-family:Arial, sans-serif;
+  background:lightgrey;   /* medium grey background */
+  color:#D9D9D9;          /* lighter grey text */
+}
+
+/* Header and footer bars */
+header, footer {
+  background:#FF7F32;     /* orange bar instead of blue */
+  color:#D9D9D9;          /* greyish text */
+  text-align:center;
+  padding:15px;
+}
+
+/* Navigation bar (copied from homepage quicklinks) */
+nav {
+  background:rgba(0,85,165,0.9); /* blue nav bar */
+  padding:15px;
+}
+nav ul {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  justify-content:center;
+}
+nav ul li {
+  margin:0 10px;
+}
+nav ul li a {
+  color:white;
+  font-weight:bold;
+  text-decoration:none;
+}
+nav ul li a:hover {
+  color:#FFD580;          /* pale orange hover */
+}
+.logout-link {
+  background:#cc0000;
+  color:white;
+  font-weight:bold;
+  text-decoration:none;
+  padding:6px 12px;
+  border-radius:4px;
+}
+.logout-link:hover { background:#990000; }
+
+/* Locker grid */
+.locker-grid {
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:20px;
+}
+.locker {
+  width:40px;
+  height:40px;
+  text-align:center;
+  line-height:40px;
+  border-radius:4px;
+  font-size:12px;
+  cursor:pointer;
+}
+
+/* Locker states */
+.available { background:#4CAF50; color:white; }   /* green */
+.pending   { background:#FFA500; color:black; }  /* orange */
+.occupied  { background:#B22222; color:white; }  /* deep red */
+
+/* Buttons inside lockers */
+.locker form { margin:0; }
+.locker button {
+  width:100%;
+  height:100%;
+  border:none;
+  background:transparent;
+  color:inherit;
+  cursor:pointer;
+}
