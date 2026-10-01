@@ -1,6 +1,6 @@
 <?php
-include(__DIR__ . "/db.php");
-require_once __DIR__ . '/includes/session.php';
+require_once dirname(__DIR__) . '/db.php';
+require_once __DIR__ . '/session.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $studentId = $_POST['studentId'] ?? '';
@@ -39,15 +39,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-require_once __DIR__ . '/includes/popup_alerts.php';
+require_once __DIR__ . '/popup_alerts.php';
 if (!empty($loginError)) {
     popup_add('error', $loginError);
 }
 
 $pageTitle  = 'Login — SecureLocker Inc.';
 $activePage = 'login';
-include __DIR__ . '/includes/head.php';
-include __DIR__ . '/includes/navbar.php';
+include __DIR__ . '/head.php';
+include __DIR__ . '/navbar.php';
 ?>
 
 <main class="auth-layout auth-layout--centered">
@@ -87,4 +87,4 @@ function toggleVis(id, btn) {
 }
 </script>
 
-<?php include __DIR__ . '/includes/footer.php'; ?>
+<?php include __DIR__ . '/footer.php'; ?>
