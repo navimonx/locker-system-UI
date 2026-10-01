@@ -5,6 +5,7 @@ import { testConnection } from './src/db.js';
 import authRoutes from './src/routes/auth.js';
 import lockerRoutes from './src/routes/lockers.js';
 import reservationRoutes from './src/routes/reservations.js';
+import adminRoutes from './src/routes/admin.js';
 
 dotenv.config();
 
@@ -14,7 +15,6 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
-// Health check
 app.get('/api/health', async (req, res) => {
   const dbOk = await testConnection();
   res.json({
@@ -25,12 +25,11 @@ app.get('/api/health', async (req, res) => {
   });
 });
 
-// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/lockers', lockerRoutes);
 app.use('/api/reservations', reservationRoutes);
+app.use('/api/admin', adminRoutes);
 
-// Error handler
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
   res.status(500).json({
@@ -41,5 +40,5 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`\n✅ Backend running on http://localhost:${PORT}`);
-  console.log(`📚 API documentation available at http://localhost:${PORT}/api/health\n`);
+  console.log(`📚 API health check: http://localhost:${PORT}/api/health\n`);
 });
