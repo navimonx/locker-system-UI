@@ -1,0 +1,100 @@
+import { Routes, Route, Link } from 'react-router-dom';
+
+function HomePage() {
+  return (
+    <main className="page-shell">
+      <header className="topbar">
+        <div className="brand">
+          <span className="brand-icon">🔒</span>
+          <span>SecureLocker</span>
+        </div>
+
+        <nav className="nav">
+          <Link to="/">Home</Link>
+          <Link to="/rentals">Rentals</Link>
+          <Link to="/my-locker">My Locker</Link>
+          <Link to="/login">Login</Link>
+        </nav>
+      </header>
+
+      <section className="hero">
+        <div className="eyebrow">🎓 Pamantasan ng Lungsod ng Valenzuela</div>
+        <h1>
+          Smart Locker Reservations
+          <span className="highlight"> Simplified for PLV</span>
+        </h1>
+        <p>
+          Reserve your campus locker in seconds. View availability by building and floor,
+          track your reservation in real time, and manage everything from one place.
+        </p>
+
+        <div className="cta-row">
+          <Link className="btn-primary" to="/rentals">🔍 Browse Lockers</Link>
+          <Link className="btn-secondary" to="/login">Login →</Link>
+        </div>
+
+        <div className="stats-strip">
+          <div className="stat-card">
+            <strong>6+</strong>
+            <span>Colleges</span>
+          </div>
+          <div className="stat-card">
+            <strong>6F</strong>
+            <span>Floors Each</span>
+          </div>
+          <div className="stat-card">
+            <strong>24/7</strong>
+            <span>Online Access</span>
+          </div>
+          <div className="stat-card">
+            <strong>100%</strong>
+            <span>Digital</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="feature-grid">
+        <article className="feature-card">
+          <div className="feature-icon">🗺️</div>
+          <h3>Browse by College & Floor</h3>
+          <p>Navigate locker availability across all colleges and floors with a clean layout.</p>
+        </article>
+
+        <article className="feature-card">
+          <div className="feature-icon">⚡</div>
+          <h3>Instant Reservations</h3>
+          <p>Reserve available lockers quickly from the browser with a streamlined intake flow.</p>
+        </article>
+
+        <article className="feature-card">
+          <div className="feature-icon">📋</div>
+          <h3>Digital Receipts</h3>
+          <p>Keep receipt records and reservation details for each student in a digital format.</p>
+        </article>
+      </section>
+    </main>
+  );
+}
+
+function RentalsPage() {
+  return <div className="page-shell simple-page"><h1>Choose Your College</h1><p>Phase 1 placeholder for rentals page.</p></div>;
+}
+
+function MyLockerPage() {
+  return <div className="page-shell simple-page"><h1>My Locker</h1><p>Phase 1 placeholder for student rentals dashboard.</p></div>;
+}
+
+function LoginPage() {
+  return <div className="page-shell simple-page auth-box"><h1>Welcome Back</h1><p>Student login placeholder.</p></div>;
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/rentals" element={<RentalsPage />} />
+      <Route path="/my-locker" element={<MyLockerPage />} />
+      <Route path="/login" element={<LoginPage />} />
+    </Routes>
+  );
+}
